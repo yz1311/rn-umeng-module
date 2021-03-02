@@ -1,0 +1,27 @@
+
+{
+  "name": "rn-bugly",
+  "version": "0.3.0",
+  "description": "bugly for react-native,支持统计，android支持全量升级",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yz1311/rn-bugly.git"
+  },
+  "keywords": [
+    "react-native",
+    "bugly"
+  ],
+  "author": "yz131",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yz1311/rn-bugly/issues"
+  },
+  "homepage": "https://github.com/yz1311/rn-bugly#readme",
+  "peerDependencies": {
+    
+  }
+}
