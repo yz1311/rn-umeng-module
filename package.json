@@ -1,27 +1,29 @@
 
 {
-  "name": "rn-bugly",
-  "version": "0.3.0",
-  "description": "bugly for react-native,支持统计，android支持全量升级",
+  "name": "rn-umeng-module",
+  "version": "0.0.2-beta1",
+  "description": "umeng统计、分享、登录 for react-native\n\n",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yz1311/rn-bugly.git"
+    "url": "git+https://github.com/yz1311/rn-umeng-module.git"
   },
   "keywords": [
     "react-native",
-    "bugly"
+    "umeng",
+    "share"
   ],
   "author": "yz131",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yz1311/rn-bugly/issues"
+    "url": "https://github.com/yz1311/rn-umeng-module/issues"
   },
-  "homepage": "https://github.com/yz1311/rn-bugly#readme",
+  "homepage": "https://github.com/yz1311/rn-umeng-module#readme",
   "peerDependencies": {
-    
+
   }
 }

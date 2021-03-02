@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C9CC00F25EE2187002047D6 /* RNUMConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CC00725EE2187002047D6 /* RNUMConfigure.m */; };
+		0C9CC01025EE2187002047D6 /* UMShareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CC00825EE2187002047D6 /* UMShareModule.m */; };
+		0C9CC01125EE2187002047D6 /* UMPushModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CC00C25EE2187002047D6 /* UMPushModule.m */; };
+		0C9CC01225EE2187002047D6 /* UMAnalyticsModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CC00D25EE2187002047D6 /* UMAnalyticsModule.m */; };
 		0CCEE68522A213F30015C160 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCEE68422A213F30015C160 /* SystemConfiguration.framework */; };
 		0CCEE68722A214000015C160 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCEE68622A214000015C160 /* Security.framework */; };
 		0CCEE68922A214070015C160 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCEE68822A214070015C160 /* libz.tbd */; };
 		0CCEE68B22A214100015C160 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCEE68A22A214100015C160 /* libc++.tbd */; };
-		0CFCD2EE229F78F90067A0F4 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CFCD2ED229F78F90067A0F4 /* Bugly.framework */; };
-		B3E7B58A1CC2AC0600A0062D /* RNBugly.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNBugly.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,14 +30,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C9CC00725EE2187002047D6 /* RNUMConfigure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNUMConfigure.m; sourceTree = "<group>"; };
+		0C9CC00825EE2187002047D6 /* UMShareModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareModule.m; sourceTree = "<group>"; };
+		0C9CC00925EE2187002047D6 /* RNUMConfigure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNUMConfigure.h; sourceTree = "<group>"; };
+		0C9CC00A25EE2187002047D6 /* UMAnalyticsModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMAnalyticsModule.h; sourceTree = "<group>"; };
+		0C9CC00B25EE2187002047D6 /* UMPushModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMPushModule.h; sourceTree = "<group>"; };
+		0C9CC00C25EE2187002047D6 /* UMPushModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMPushModule.m; sourceTree = "<group>"; };
+		0C9CC00D25EE2187002047D6 /* UMAnalyticsModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMAnalyticsModule.m; sourceTree = "<group>"; };
+		0C9CC00E25EE2187002047D6 /* UMShareModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareModule.h; sourceTree = "<group>"; };
 		0CCEE68422A213F30015C160 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0CCEE68622A214000015C160 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0CCEE68822A214070015C160 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		0CCEE68A22A214100015C160 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		0CFCD2ED229F78F90067A0F4 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
-		134814201AA4EA6300B7C361 /* libRNBugly.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNBugly.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5881CC2AC0600A0062D /* RNBugly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNBugly.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* RNBugly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNBugly.m; sourceTree = "<group>"; };
+		134814201AA4EA6300B7C361 /* libRNUmeng.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNUmeng.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +54,6 @@
 				0CCEE68922A214070015C160 /* libz.tbd in Frameworks */,
 				0CCEE68722A214000015C160 /* Security.framework in Frameworks */,
 				0CCEE68522A213F30015C160 /* SystemConfiguration.framework in Frameworks */,
-				0CFCD2EE229F78F90067A0F4 /* Bugly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +67,6 @@
 				0CCEE68822A214070015C160 /* libz.tbd */,
 				0CCEE68622A214000015C160 /* Security.framework */,
 				0CCEE68422A213F30015C160 /* SystemConfiguration.framework */,
-				0CFCD2ED229F78F90067A0F4 /* Bugly.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -69,7 +74,7 @@
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libRNBugly.a */,
+				134814201AA4EA6300B7C361 /* libRNUmeng.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,8 +82,14 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* RNBugly.h */,
-				B3E7B5891CC2AC0600A0062D /* RNBugly.m */,
+				0C9CC00925EE2187002047D6 /* RNUMConfigure.h */,
+				0C9CC00725EE2187002047D6 /* RNUMConfigure.m */,
+				0C9CC00A25EE2187002047D6 /* UMAnalyticsModule.h */,
+				0C9CC00D25EE2187002047D6 /* UMAnalyticsModule.m */,
+				0C9CC00B25EE2187002047D6 /* UMPushModule.h */,
+				0C9CC00C25EE2187002047D6 /* UMPushModule.m */,
+				0C9CC00E25EE2187002047D6 /* UMShareModule.h */,
+				0C9CC00825EE2187002047D6 /* UMShareModule.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				0CFCD2EC229F78F90067A0F4 /* Frameworks */,
 			);
@@ -87,9 +98,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* RNBugly */ = {
+		58B511DA1A9E6C8500147676 /* RNUmeng */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNBugly" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNUmeng" */;
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
@@ -99,9 +110,9 @@
 			);
 			dependencies = (
 			);
-			name = RNBugly;
+			name = RNUmeng;
 			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libRNBugly.a */;
+			productReference = 134814201AA4EA6300B7C361 /* libRNUmeng.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -118,11 +129,12 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNBugly" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNUmeng" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -130,7 +142,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* RNBugly */,
+				58B511DA1A9E6C8500147676 /* RNUmeng */,
 			);
 		};
 /* End PBXProject section */
@@ -140,7 +152,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* RNBugly.m in Sources */,
+				0C9CC01125EE2187002047D6 /* UMPushModule.m in Sources */,
+				0C9CC00F25EE2187002047D6 /* RNUMConfigure.m in Sources */,
+				0C9CC01225EE2187002047D6 /* UMAnalyticsModule.m in Sources */,
+				0C9CC01025EE2187002047D6 /* UMShareModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +258,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNBugly;
+				PRODUCT_NAME = RNUmeng;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -263,7 +278,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNBugly;
+				PRODUCT_NAME = RNUmeng;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -271,7 +286,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNBugly" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNUmeng" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -280,7 +295,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNBugly" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNUmeng" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,
