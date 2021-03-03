@@ -29,14 +29,14 @@ import com.umeng.socialize.media.UMWeb;
  * Created by wangfei on 17/8/28.
  */
 
-public class ShareModule extends ReactContextBaseJavaModule {
+public class RNShareModule extends ReactContextBaseJavaModule {
     private static Activity ma;
     private final int SUCCESS = 200;
     private final int ERROR = 0;
     private final int CANCEL = -1;
     private static Handler mSDKHandler = new Handler(Looper.getMainLooper());
     private ReactApplicationContext contect;
-    public ShareModule(ReactApplicationContext reactContext) {
+    public RNShareModule(ReactApplicationContext reactContext) {
         super(reactContext);
         contect = reactContext;
 

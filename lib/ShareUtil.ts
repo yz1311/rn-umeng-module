@@ -21,29 +21,4 @@ export default class PushUtil {
                          shareMedias: Array<SHARE_MEDIAS>, callback: (code: UMENG_SAHRE_RESULT_CODES, message: string)=>void) => {
         UMShareModule.shareboard(text, img, webUrl, title, shareMedias, callback);
     }
-
-    static addAlias = (alias: string, aliasType: string, callback: (code:number)=>void) => {
-        UMShareModule.addAlias(alias, aliasType, callback);
-    }
-
-    /**
-     * android端暂未实现
-     * @param eventId
-     * @param map
-     */
-    static addAliasType = (eventId: string, map: {[key:string]: string}) => {
-        // UMShareModule.onEventWithMap(eventId, map);
-    }
-
-    static addExclusiveAlias = (exclusiveAlias: string, aliasType: string, callback: (code:number)=>void) => {
-        UMShareModule.addExclusiveAlias(exclusiveAlias, aliasType, callback);
-    }
-
-    static deleteAlias = (alias: string, aliasType: string, callback: (code:number)=>void) => {
-        UMShareModule.deleteAlias(alias, aliasType, callback);
-    }
-
-    static appInfo = (callback: (info: string)=>void) => {
-        UMShareModule.appInfo(callback);
-    }
 }

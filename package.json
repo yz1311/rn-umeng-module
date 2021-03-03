@@ -1,12 +1,17 @@
 
 {
   "name": "rn-umeng-module",
-  "version": "0.0.2-beta1",
+  "version": "0.0.2",
   "description": "umeng统计、分享、登录 for react-native\n\n",
   "main": "index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.17",
+    "@types/react-native": "^0.63.50",
+    "typescript": "^4.1.0"
   },
   "repository": {
     "type": "git",

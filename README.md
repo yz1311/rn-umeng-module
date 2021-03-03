@@ -160,6 +160,15 @@ implementation  'com.umeng.umsdk:share-dingding:7.1.4'
 
 打开project的build.gradle文件中添加
 ```javascript
+buildscript {
+  repositories {
+    google()
+    jcenter()
+    maven { url 'https://dl.bintray.com/umsdk/release' }
+    maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+    ....
+  }
+}
 allprojects {
     repositories {
         //umeng的仓库地址
@@ -194,8 +203,8 @@ public class WXEntryActivity extends WXCallbackActivity {
 
 
 
-* 4.在res/xml目录(如果没有xml目录，则新建一个)下,创建`file_paths.xml`文件
-  (如果已经存在，则按照下面代码添加缺失的部分即可)
+* 4.在res/xml目录(如果没有xml目录，则新建一个)下,创建``文件
+  (如果已经存在，则按照下面代码添加缺失的部分即可)file_paths.xml
   
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -240,13 +249,13 @@ public class WXEntryActivity extends WXCallbackActivity {
 ```xml
 <!-- Android 7.0 文件共享配置，必须配置 -->
 <provider
-    android:name="android.support.v4.content.FileProvider"
+    android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"
     android:exported="false"
     android:grantUriPermissions="true">
   <meta-data
           android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/file_paths />
+          android:resource="@xml/file_paths" />
 </provider>
 ```
 
@@ -272,6 +281,16 @@ public class WXEntryActivity extends WXCallbackActivity {
     android:theme="@android:style/Theme.Translucent.NoTitleBar"
     android:configChanges="orientation|keyboardHidden|screenSize"/>
 ```
+<font color="red">上面针对QQ的均不用设置，新版本sdk中已经内置，只需要在`app/buid.gradle`中设置
+```javascript
+defaultConfig {
+    ...
+    manifestPlaceholders= [
+        qqappid: '你的QQ的appId'
+    ]
+    ...
+}
+```
 
 * 6.在`Application`文件的`onCreate()`中进行初始化
 
@@ -281,8 +300,7 @@ public class WXEntryActivity extends WXCallbackActivity {
   public void onCreate() {
       super.onCreate();
       SoLoader.init(this, /* native exopackage */ false);
-      RNUMConfigure.init(this, "59892f08310c9307b60023d0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE,
-          "669c30a9584623e70e8cd01b0381dcb4");
+      RNUMConfigure.init(this, "59892f08310c9307b60023d0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
       PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
       //豆瓣RENREN平台目前只能在服务器端配置
       PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
@@ -300,7 +318,7 @@ public class WXEntryActivity extends WXCallbackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      ShareModule.initSocialSDK(this);
+      RNShareModule.initSocialSDK(this);
     }
 
     @Override

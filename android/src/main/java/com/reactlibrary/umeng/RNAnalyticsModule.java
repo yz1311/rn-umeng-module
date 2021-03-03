@@ -27,10 +27,10 @@ import com.umeng.analytics.MobclickAgent;
  * -- 适配海棠版(common 2.0.0 + analytics 8.0.0) modify by yujie on 18/12/28
  */
 
-public class AnalyticsModule extends ReactContextBaseJavaModule {
+public class RNAnalyticsModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext context;
 
-    public AnalyticsModule(ReactApplicationContext reactContext) {
+    public RNAnalyticsModule(ReactApplicationContext reactContext) {
         super(reactContext);
         context = reactContext;
     }
