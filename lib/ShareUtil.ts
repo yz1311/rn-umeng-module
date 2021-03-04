@@ -1,24 +1,32 @@
-/**
- * Created by wangfei on 17/8/28.
- */
-import {SHARE_MEDIAS, UMENG_SAHRE_RESULT_CODES} from "../types";
+import {BaseMediaObject, SHARE_MEDIAS, SHARE_STYLES, UMENG_SAHRE_RESULT_CODES} from "../types";
 
-var { NativeModules } = require('react-native');
+const { NativeModules } = require('react-native');
 const UMShareModule = NativeModules.UMShareModule;
 
 
 export default class PushUtil {
-    static share = (text: string, img: string, webUrl: string, title: string,
-                    shareMedia: SHARE_MEDIAS, callback: (code: UMENG_SAHRE_RESULT_CODES, message: string)=>void) => {
-        UMShareModule.share(text, img, webUrl, title, shareMedia, callback);
+    /**
+     * 分享
+     * 成功或者取消都是resolve(根据code判断)，失败才是reject
+     * @param shareStyle
+     * @param shareObject
+     */
+    static share = (shareStyle: SHARE_STYLES, shareObject: BaseMediaObject):
+        Promise<{shareMedia: SHARE_MEDIAS,code: UMENG_SAHRE_RESULT_CODES, message?: string}> => {
+        if(!shareObject) {
+            console.warn('shareObject不能为空');
+            return;
+        }
+        return UMShareModule.share(shareStyle, shareObject);
     }
 
-    static auth = (shareMedia: number, callback: (code:number, ret: {[key: string]: string}, message: string)=>void) => {
-        UMShareModule.auth(shareMedia, callback);
-    }
-
-    static shareboard = (text: string, img: string, webUrl: string, title: string,
-                         shareMedias: Array<SHARE_MEDIAS>, callback: (code: UMENG_SAHRE_RESULT_CODES, message: string)=>void) => {
-        UMShareModule.shareboard(text, img, webUrl, title, shareMedias, callback);
+    /**
+     * 授权
+     * 成功或者取消都是resolve(根据code判断)，失败才是reject
+     * @param shareMedia
+     */
+    static auth = (shareMedia: SHARE_MEDIAS):
+        Promise<{shareMedia: SHARE_MEDIAS,code: UMENG_SAHRE_RESULT_CODES, data?: Record<string, string>, message?: string}> => {
+        return UMShareModule.auth(shareMedia);
     }
 }

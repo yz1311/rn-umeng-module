@@ -1,6 +1,5 @@
 package com.reactlibrary.umeng;
 
-import java.net.URLEncoder;
 import java.util.Map;
 
 import android.app.Activity;
@@ -9,13 +8,13 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.umeng.commonsdk.framework.UMWorkDispatch;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -23,10 +22,15 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.common.ResContainer;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMMin;
+import com.umeng.socialize.media.UMQQMini;
 import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.media.UMVideo;
+import com.umeng.socialize.media.UMusic;
 
 /**
  * Created by wangfei on 17/8/28.
+ * Modified by yangzhao on 21/3/4
  */
 
 public class RNShareModule extends ReactContextBaseJavaModule {
@@ -52,41 +56,16 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         mSDKHandler.postDelayed(runnable, 0);
     }
     @ReactMethod
-    public void share(final String text, final String img, final String weburl, final String title, final int sharemedia, final Callback successCallback){
+    public void share(final int shareStyle, final ReadableMap shareObject, final Promise promise){
         runOnMainThread(new Runnable() {
             @Override
             public void run() {
-
-                if (!TextUtils.isEmpty(weburl)){
-                    UMWeb web = new UMWeb(weburl);
-                    web.setTitle(title);
-                    web.setDescription(text);
-                    if (getImage(img)!=null){
-                        web.setThumb(getImage(img));
-                    }
-                    new ShareAction(ma).withText(text)
-                        .withMedia(web)
-                        .setPlatform(getShareMedia(sharemedia))
-                        .setCallback(getUMShareListener(successCallback))
-                        .share();
-                }else if (getImage(img)!=null){
-                    new ShareAction(ma).withText(text)
-                        .withMedia(getImage(img))
-                        .setPlatform(getShareMedia(sharemedia))
-                        .setCallback(getUMShareListener(successCallback))
-                        .share();
-                }else {
-                    new ShareAction(ma).withText(text)
-                        .setPlatform(getShareMedia(sharemedia))
-                        .setCallback(getUMShareListener(successCallback))
-                        .share();
-                }
-
+                invokeShare(shareStyle, shareObject, promise);
             }
         });
 
     }
-    private UMShareListener getUMShareListener(final Callback successCallback){
+    private UMShareListener getUMShareListener(final Promise promise){
         return new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
@@ -95,17 +74,27 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onResult(SHARE_MEDIA share_media) {
-                successCallback.invoke(SUCCESS, "success");
+                WritableMap map = Arguments.createMap();
+                map.putInt("shareMedia", share_media.ordinal());
+                map.putInt("code", SUCCESS);
+                promise.resolve(map);
             }
 
             @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                successCallback.invoke(ERROR, throwable.getMessage());
+                WritableMap map = Arguments.createMap();
+                map.putInt("shareMedia", share_media.ordinal());
+                map.putInt("code", ERROR);
+                map.putString("message", throwable.getMessage());
+                promise.reject(ERROR+"", map);
             }
 
             @Override
             public void onCancel(SHARE_MEDIA share_media) {
-                successCallback.invoke(CANCEL, "cancel");
+                WritableMap map = Arguments.createMap();
+                map.putInt("shareMedia", share_media.ordinal());
+                map.putInt("code", CANCEL);
+                promise.resolve(map);
             }
         };
     }
@@ -123,7 +112,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         }
     }
     @ReactMethod
-    public void auth(final int  sharemedia, final Callback successCallback){
+    public void auth(final int  sharemedia, final Promise promise){
         runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -135,24 +124,33 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                        WritableMap resultMap = Arguments.createMap();
+                        resultMap.putInt("shareMedia", share_media.ordinal());
+                        resultMap.putInt("code", SUCCESS);
                         WritableMap result = Arguments.createMap();
                         for (String key:map.keySet()){
                             result.putString(key,map.get(key));
                             Log.e("todoremove","key="+key+"   value"+map.get(key).toString());
                         }
-                        successCallback.invoke(0,result,"success");
+                        resultMap.putMap("data", result);
+                        promise.resolve(resultMap);
                     }
 
                     @Override
                     public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        WritableMap result = Arguments.createMap();
-                        successCallback.invoke(1,result,throwable.getMessage());
+                        WritableMap map = Arguments.createMap();
+                        map.putInt("shareMedia", share_media.ordinal());
+                        map.putInt("code", ERROR);
+                        map.putString("message", throwable.getMessage());
+                        promise.reject(ERROR+"", map);
                     }
 
                     @Override
                     public void onCancel(SHARE_MEDIA share_media, int i) {
-                        WritableMap result = Arguments.createMap();
-                        successCallback.invoke(2,result,"cancel");
+                        WritableMap map = Arguments.createMap();
+                        map.putInt("shareMedia", share_media.ordinal());
+                        map.putInt("code", CANCEL);
+                        promise.resolve(map);
                     }
                 });
             }
@@ -160,52 +158,154 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
     }
 
-    @ReactMethod
-    public void shareboard(final String text, final String img, final String weburl, final String title, final ReadableArray sharemedias, final Callback successCallback){
-        runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
 
-                if (!TextUtils.isEmpty(weburl)){
-                    UMWeb web = new UMWeb(weburl);
-                    web.setTitle(title);
-                    web.setDescription(text);
-                    if (getImage(img)!=null){
-                        web.setThumb(getImage(img));
-                    }
-                    new ShareAction(ma).withText(text)
-                        .withMedia(web)
-                        .setDisplayList(getShareMedias(sharemedias))
-                        .setCallback(getUMShareListener(successCallback))
-                        .open();
-                }else if (getImage(img)!=null){
-                    new ShareAction(ma).withText(text)
-                        .withMedia(getImage(img))
-                        .setDisplayList(getShareMedias(sharemedias))
-                        .setCallback(getUMShareListener(successCallback))
-                        .open();
-                }else {
-                    new ShareAction(ma).withText(text)
-                        .setDisplayList(getShareMedias(sharemedias))
-                        .setCallback(getUMShareListener(successCallback))
-                        .open();
+    private void invokeShare(final int shareStyle, final ReadableMap shareObject, final Promise promise) {
+        final String title = shareObject.getString("title");
+        final String description = shareObject.getString("description");
+        final ReadableArray shareMediaArr = shareObject.getArray("shareMedias");
+        SHARE_MEDIA[] shareMediaValues = new SHARE_MEDIA[shareMediaArr.size()];
+        for (int i = 0;i<shareMediaArr.size();i++) {
+            shareMediaValues[i] = SHARE_MEDIA.values()[shareMediaArr.getInt(i)];
+        }
+        ShareAction action = new ShareAction(ma)
+                .setCallback(getUMShareListener(promise));
+        //如果只传入一个平台，则不调用分享面板
+        if(shareMediaValues.length == 1) {
+            action = action.setPlatform(shareMediaValues[0]);
+        } else {
+            action = action.setDisplayList(shareMediaValues);
+        }
+        final String follow = shareObject.getString("follow");
+        final String subject = shareObject.getString("subject");
+        if(follow!=null&&!"".equals(follow)) {
+            action = action.withFollow(follow);
+        }
+        if(subject!=null&&!"".equals(subject)) {
+            action = action.withSubject(subject);
+        }
+        ReadableArray images = null;
+        switch (shareStyle) {
+            //网页链接（网页H5链接）
+            case 0:
+                final String webUrl = shareObject.getString("url");
+                final String webThumb = shareObject.getString("thumb");
+                UMWeb web = new UMWeb(webUrl);
+                web.setTitle(title);
+                web.setThumb(getImage(webThumb));
+                web.setDescription(description);
+                action = action.withMedia(web);
+                break;
+            //微信小程序
+            case 1:
+                final String path = shareObject.getString("path");
+                final String userName = shareObject.getString("miniAppId");
+                final String minUrl = shareObject.getString("url");
+                final String minThumb = shareObject.getString("thumb");
+                UMMin umMin = new UMMin(minUrl);
+                umMin.setTitle(title);
+                umMin.setThumb(getImage(minThumb));
+                umMin.setDescription(description);
+                umMin.setPath(path);
+                umMin.setUserName(userName);
+                action = action.withMedia(umMin);
+                break;
+            //QQ小程序
+            case 2:
+                final String miniAppId = shareObject.getString("miniAppId");
+                final String miniAppPath = shareObject.getString("path");
+                final String miniAppType = shareObject.getString("type");
+                final String miniAppUrl = shareObject.getString("url");
+                final String miniAppThumb = shareObject.getString("thumb");
+                UMQQMini qqMini = new UMQQMini(miniAppUrl);
+                qqMini.setTitle(title);
+                qqMini.setThumb(getImage(miniAppThumb));
+                qqMini.setDescription(description);
+                qqMini.setMiniAppId(miniAppId);
+                qqMini.setPath(miniAppPath);
+                if(miniAppType != null && !"".equals(miniAppType)) {
+                    qqMini.setType(miniAppType);
                 }
+                action = action.withMedia(qqMini);
+                break;
+            //图片
+            case 3:
+                images = shareObject.getArray("images");
+                if(images.size() != 1) {
+                    promise.reject(ERROR+"", "单图分享只支持一张图片");
+                    return;
+                }
+                final String imageUrl = images.getMap(0).getString("url");
+                final String imageThumb = images.getMap(0).getString("thumb");
+                final UMImage image = getImage(imageUrl);
+                //对于部分平台，需要设置缩略图
+                if(imageThumb != null && !"".equals(imageThumb)) {
+                    image.setThumb(getImage(imageThumb));
+                }
+                //TODO:设置压缩方式和文件格式
+                action = action.withText(description!=null?description:"");
+                action = action.withMedia(image);
+                break;
+            //纯文本
+            case 4:
+                action = action.withText(description);
+                break;
+            //多图（多图要包含文字描述）
+            case 5:
+                images = shareObject.getArray("images");
+                UMImage[] mediasArr = new UMImage[images.size()];
+                for (int i=0;i<images.size();i++) {
+                    ReadableMap tempImage = images.getMap(i);
+                    String tempUrl = tempImage.getString("url");
+                    String tempThumb = tempImage.getString("thumb");
+                    final UMImage mediaImage = getImage(tempUrl);
+                    //对于部分平台，需要设置缩略图
+                    if(tempThumb != null && !"".equals(tempThumb)) {
+                        mediaImage.setThumb(getImage(tempThumb));
+                    }
+                    mediasArr[i] = mediaImage;
+                }
+                //TODO:设置压缩方式和文件格式
+                action = action.withText(description!=null?description:"");
+                action = action.withMedias(mediasArr);
+                break;
+            //视频
+            case 6:
+                final String videoUrl = shareObject.getString("url");
+                final String videoThumb = shareObject.getString("thumb");
+                UMVideo video = new UMVideo(videoUrl);
+                video.setTitle(title);
+                video.setThumb(getImage(videoThumb));
+                video.setDescription(description);
+                action = action.withMedia(video);
+                break;
+            //音乐
+            case 7:
+                final String musicUrl = shareObject.getString("url");
+                final String musicThumb = shareObject.getString("thumb");
+                final String musicTargetUrl = shareObject.getString("targetUrl");
+                UMusic music = new UMusic(musicUrl);
+                music.setTitle(title);
+                music.setThumb(getImage(musicThumb));
+                music.setDescription(description);
+                music.setmTargetUrl(musicTargetUrl);
+                action = action.withMedia(music);
+                break;
+            //表情（GIF图片，即Emotion类型，只有微信支持）
+            case 8:
 
-            }
-        });
-
+                break;
+        }
+        action.share();
     }
+
     private SHARE_MEDIA getShareMedia(int num){
         switch (num){
             case 0:
                 return SHARE_MEDIA.QQ;
-
             case 1:
                 return SHARE_MEDIA.SINA;
-
             case 2:
                 return SHARE_MEDIA.WEIXIN;
-
             case 3:
                 return SHARE_MEDIA.WEIXIN_CIRCLE;
             case 4:
@@ -271,12 +371,5 @@ public class RNShareModule extends ReactContextBaseJavaModule {
             default:
                 return SHARE_MEDIA.QQ;
         }
-    }
-    private SHARE_MEDIA[] getShareMedias(ReadableArray num){
-        SHARE_MEDIA[] medias = new SHARE_MEDIA[num.size()];
-        for (int i = 0 ; i <num.size();i++){
-            medias[i] = getShareMedia(num.getInt(i));
-        }
-        return medias;
     }
 }
