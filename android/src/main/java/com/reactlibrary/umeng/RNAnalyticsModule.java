@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.Iterator;
 
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -151,9 +151,9 @@ public class RNAnalyticsModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getPreProperties(Callback callback) {
+    public void getPreProperties(final Promise promise) {
         String result = MobclickAgent.getPreProperties(context).toString();
-        callback.invoke(result);
+        promise.resolve(result);
     }
     @ReactMethod
     public void clearPreProperties() {

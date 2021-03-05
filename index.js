@@ -1,8 +1,11 @@
 
 import AnalyticsUtil from "./lib/AnalyticsUtil";
-import ShareUtil from "./lib/ShareUtil";
+import ShareUtil, {SHARE_MEDIAS, SHARE_STYLES, SAHRE_RESULT_CODES} from "./lib/ShareUtil";
 
 export {
     AnalyticsUtil,
-    ShareUtil
+    ShareUtil,
+    SHARE_MEDIAS,
+    SHARE_STYLES,
+    SAHRE_RESULT_CODES
 };

@@ -1,97 +1,6 @@
 import AnalyticsUtil from "../lib/AnalyticsUtil";
 // import PushUtil from "../lib/PushUtil";
-import ShareUtil from '../lib/ShareUtil';
-
-/**
- * umeng分享/授权回调的code
- */
-export enum UMENG_SAHRE_RESULT_CODES {
-    SUCCESS = 200,
-    ERROR = 0,
-    CANCEL = -1
-}
-
-/**
- * umeng分享样式(这个顺序不要乱动，原生是按照这个判断实现的)
- */
-export enum SHARE_STYLES {
-    /**
-     * 网页链接（网页H5链接）
-     */
-    LINK,
-    /**
-     * 微信小程序
-     */
-    WEIXIN_MINI_PROGRAM,
-    /**
-     * QQ小程序
-     */
-    QQ_MINI_PROGRAM,
-    /**
-     *
-     */
-    IMAGE,
-    /**
-     * 纯文本
-     */
-    TEXT,
-    /**
-     * 多图（多图要包含文字描述）
-     */
-    MULITI_IMAGE,
-    /**
-     * 视频
-     */
-    VIDEO,
-    /**
-     * 音乐
-     */
-    MUSIC,
-    /**
-     * 表情（GIF图片，即Emotion类型，只有微信支持）
-     */
-    Emotion,
-}
-
-/**
- * umeng分享的类型
- */
-export enum SHARE_MEDIAS {
-    QQ = 0,
-    SINA,
-    WEIXIN,    //微信
-    WEIXIN_CIRCLE,   //朋友圈
-    QZONE,   //QQ空间
-    EMAIL,   //电子邮件
-    SMS,     //短信
-    FACEBOOK,  //facebook
-    TWITTER,   //twitter
-    WEIXIN_FAVORITE,  //微信收藏
-    GOOGLEPLUS,   //google+
-    RENREN,     //人人
-    TENCENT,    //腾讯微博
-    DOUBAN,     //豆瓣
-    FACEBOOK_MESSAGER,  //facebook messager
-    YIXIN,    //易信
-    YIXIN_CIRCLE,   //易信朋友圈
-    INSTAGRAM,
-    PINTEREST,
-    EVERNOTE,   //印象笔记
-    POCKET,
-    LINKEDIN,
-    FOURSQUARE,
-    YNOTE,   //有道云笔记
-    WHATSAPP,
-    LINE,
-    FLICKR,
-    TUMBLR,
-    ALIPAY,   //支付宝
-    KAKAO,
-    DROPBOX,
-    VKONTAKTE,
-    DINGTALK,   //钉钉
-    MORE,    //系统菜单
-}
+import ShareUtil, {SHARE_MEDIAS, SHARE_STYLES, SAHRE_RESULT_CODES} from '../lib/ShareUtil';
 
 /**
  * 所有分类类型的基类型
@@ -128,9 +37,12 @@ export type BaseMediaObject = {
 }
 
 
-export interface UMQQMini extends Omit<BaseMediaObject, 'shareMedia'> {
+/**
+ * 小程序(支持微信和QQ)
+ */
+export interface UMMini extends Omit<BaseMediaObject, 'shareMedia'> {
     /**
-     *
+     * 若客户端版本低于6.5.6或在iPad客户端接收，小程序类型分享将自动转成网页类型分享。开发者必须填写网页链接字段，确保低版本客户端能正常打开网页链接。
      */
     url: string;
     /**
@@ -228,5 +140,8 @@ export type UMEmoji = {
 export {
     AnalyticsUtil,
     // PushUtil,
-    ShareUtil
+    ShareUtil,
+    SHARE_MEDIAS,
+    SHARE_STYLES,
+    SAHRE_RESULT_CODES
 };

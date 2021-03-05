@@ -133,7 +133,8 @@ RCT_EXPORT_METHOD(unregisterPreProperty:(NSString *)propertyName)
 }
 
 
-RCT_EXPORT_METHOD(getPreProperties:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(getPreProperties:(RCTPromiseResolveBlock)resolve
+                                    reject:(RCTPromiseRejectBlock)reject)
 {
   NSString *jsonString = nil;
   NSError *error = nil;
@@ -146,9 +147,7 @@ RCT_EXPORT_METHOD(getPreProperties:(RCTResponseSenderBlock)callback)
   }else{
     jsonString=@"";
   }
-
-  callback(@[jsonString]);
-
+  resolve(@[jsonString]);
 }
 
 RCT_EXPORT_METHOD(clearPreProperties)

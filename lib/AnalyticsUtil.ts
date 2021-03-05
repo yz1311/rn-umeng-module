@@ -86,8 +86,8 @@ export default class AnalyticsUtil {
      * 获取预置事件属性
      * @param callback 返回包含所有预置事件属性的JSONObject
      */
-    static getPreProperties = (callback: (result: string)=>void) => {
-        UMAnalyticsModule.getPreProperties(callback);
+    static getPreProperties = (callback: (result: string)=>void):Promise<string> => {
+        return UMAnalyticsModule.getPreProperties(callback);
     }
 
     /**
