@@ -86,7 +86,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                 map.putInt("shareMedia", share_media.ordinal());
                 map.putInt("code", ERROR);
                 map.putString("message", throwable.getMessage());
-                promise.reject(ERROR+"", map);
+                promise.reject(ERROR+"", throwable.getMessage(), map);
             }
 
             @Override
@@ -142,7 +142,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                         map.putInt("shareMedia", share_media.ordinal());
                         map.putInt("code", ERROR);
                         map.putString("message", throwable.getMessage());
-                        promise.reject(ERROR+"", map);
+                        promise.reject(ERROR+"", throwable.getMessage(), map);
                     }
 
                     @Override

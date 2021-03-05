@@ -176,10 +176,7 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareStyle shareObject:(NSDictionary *)shareO
                  msg = @"share failed";
                }
                NSInteger stCode = error.code;
-//               if(stCode == 2009){
-//                 stCode = -1;
-//               }
-               reject([NSString stringWithFormat:@"%ld", stCode], msg, nil);
+               reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
            }else{
                if ([data isKindOfClass:[UMSocialShareResponse class]]) {
                    UMSocialShareResponse *resp = data;
@@ -232,26 +229,23 @@ RCT_EXPORT_METHOD(auth:(NSNumber*)platform resolve:(RCTPromiseResolveBlock)resol
         if (!msg) {
           msg = error.userInfo[@"message"];
         }if (!msg) {
-          msg = @"share failed";
+          msg = @"auth failed";
         }
         NSInteger stCode = error.code;
-//       if(stCode == 2009){
-//         stCode = -1;
-//       }
-        reject([NSString stringWithFormat:@"%ld", stCode], msg, nil);
+        reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
       } else {
         UMSocialUserInfoResponse *authInfo = result;
 
         NSMutableDictionary *retDict = [NSMutableDictionary dictionaryWithCapacity:8];
         retDict[@"uid"] = authInfo.uid;
-        retDict[@"openId"] = authInfo.openid;
-        retDict[@"unionId"] = authInfo.unionId;
+        retDict[@"openid"] = authInfo.openid;
+        retDict[@"unionid"] = authInfo.unionId;
         retDict[@"accessToken"] = authInfo.accessToken;
         retDict[@"refreshToken"] = authInfo.refreshToken;
         retDict[@"expiration"] = authInfo.expiration;
 
         retDict[@"name"] = authInfo.name;
-        retDict[@"iconUrl"] = authInfo.iconurl;
+        retDict[@"iconurl"] = authInfo.iconurl;
         retDict[@"gender"] = authInfo.unionGender;
 
         NSDictionary *originInfo = authInfo.originalResponse;

@@ -83,12 +83,13 @@ export interface UMImage extends Omit<BaseMediaObject, 'description'> {
          */
         url: string;
         /**
-         *
+         * 压缩质量(Android Only)
          * SCALE: 大小压缩，默认为大小压缩，适合普通很大的图
          * QUALITY: 质量压缩，适合长图的分享
          */
         compressStyle: 'SCALE' | 'QUALITY',
         /**
+         * 压缩格式(Android Only)
          * 用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
          */
         compressFormat: 'JPEG' | 'PNG' | 'WEBP'

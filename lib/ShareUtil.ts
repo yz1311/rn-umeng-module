@@ -1,12 +1,17 @@
 import {BaseMediaObject} from "../types";
+import {
+    Platform,
+    NativeModules
+} from 'react-native';
 
-const { NativeModules } = require('react-native');
 const UMShareModule = NativeModules.UMShareModule;
 
-export default class PushUtil {
+export default class ShareUtil {
     /**
      * 分享
      * 成功或者取消都是resolve(根据code判断)，失败才是reject
+     * ios下面，如果分享失败，返回的error，code即为umeng返回的错误码，message即为错误信息
+     * android下，返回的error
      * @param shareStyle
      * @param shareObject
      */
@@ -14,6 +19,25 @@ export default class PushUtil {
         Promise<{shareMedia: SHARE_MEDIAS,code: SAHRE_RESULT_CODES, message?: string}> => {
         if(!shareObject) {
             console.warn('shareObject不能为空');
+            return;
+        }
+        if(!shareObject.shareMedias) {
+            shareObject.shareMedias = [];
+        }
+        if(shareStyle === SHARE_STYLES.MULITI_IMAGE) {
+            if(Platform.OS !== 'android' ||
+            Platform.OS === 'android' && shareObject.shareMedias.length>0
+                && shareObject.shareMedias.some(x=>x!==SHARE_MEDIAS.SINA && x!==SHARE_MEDIAS.QZONE)) {
+                console.warn("多图模式只支持android平台下的新浪微博和QQ空间");
+                return;
+            }
+            if(!shareObject.description || shareObject.description?.trim() === '') {
+                console.warn("多图模式下必须要带文字描述:description");
+                return;
+            }
+        }
+        if(shareStyle === SHARE_STYLES.Emotion) {
+            console.warn("分享表情暂未实现");
             return;
         }
         return UMShareModule.share(shareStyle, shareObject);
@@ -57,7 +81,7 @@ export enum SHARE_STYLES {
      */
     QQ_MINI_PROGRAM,
     /**
-     *
+     * 单图
      */
     IMAGE,
     /**
@@ -66,6 +90,8 @@ export enum SHARE_STYLES {
     TEXT,
     /**
      * 多图（多图要包含文字描述）
+     * 只支持android平台(ios没发现相关的api)的新浪微博和QQ空间，都是最多上传9张图片
+     * 新浪微博超过9张不会上传,QQ控件超过9张会上传QQ控件相册
      */
     MULITI_IMAGE,
     /**

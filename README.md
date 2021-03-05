@@ -255,6 +255,8 @@ public class WXEntryActivity extends WXCallbackActivity {
     android:grantUriPermissions="true">
   <meta-data
           android:name="android.support.FILE_PROVIDER_PATHS"
+          <!-- 如果编译报错的话，打开下面这个 -->
+          <!--tools:replace="android:resource"-->
           android:resource="@xml/file_paths" />
 </provider>
 ```
@@ -281,7 +283,7 @@ public class WXEntryActivity extends WXCallbackActivity {
     android:theme="@android:style/Theme.Translucent.NoTitleBar"
     android:configChanges="orientation|keyboardHidden|screenSize"/>
 ```
-<font color="red">上面针对QQ的均不用设置，新版本sdk中已经内置，只需要在`app/buid.gradle`中设置
+<font color="red">上面针对QQ的均不用设置，新版本sdk中已经内置，只需要在`app/buid.gradle`中设置</font>
 ```javascript
 defaultConfig {
     ...
@@ -302,10 +304,10 @@ defaultConfig {
       SoLoader.init(this, /* native exopackage */ false);
       RNUMConfigure.init(this, "59892f08310c9307b60023d0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
       PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
-      //豆瓣RENREN平台目前只能在服务器端配置
-      PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
-      PlatformConfig.setYixin("yxc0614e80c9304c11b0391514d09f13bf");
+      //QQ和QQ空间的appId
       PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+      PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+      ...
   }
 ```
   
@@ -330,7 +332,7 @@ defaultConfig {
 
 ## 使用
 ```javascript
-import {AnalyticsUtil, PushUtil, ShareUtil} from 'rn-umeng-module';
+import {AnalyticsUtil, ShareUtil} from 'rn-umeng-module';
 
 ```
 
@@ -339,31 +341,3 @@ import {AnalyticsUtil, PushUtil, ShareUtil} from 'rn-umeng-module';
 
 ## 注意事项&&疑问
 
-#### 1.无法使用?
-
-请升级到最新版本后再试
-
-目前对于React Native不用区分版本，直接使用最新版即可,只是安装方式略有不同
-
-#### 2.<font color='red'>集成后全量更新无效果</font>
-
-请确定targetSDKVersion是否为28或者以上，bugly请求由于使用了http，而android 9默认是不支持http请求的，需要调整下
-
-具体请参考:
-
-https://blog.csdn.net/weixin_34114823/article/details/88037177
-
-#### 3.为什么我点击更新按钮后，对话框关闭，啥反应都没有?
-
-等一会会出现安装提示,bugly对的更新方式是直接在通知栏显示下载进度，下载完成覆盖安装，如果状态栏没有提示，那就是没有通知权限(oppo/vivo系统是默认不开启该权限的)
-
-
-
-#### 4.其他问题可在官方项目中查找答案
-
-https://github.com/BuglyDevTeam/Bugly-Android-Demo
-  
-## 截图
-
-<img src='https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpp54zj0nj30u01uoqed.jpg' />
-<img src='https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpp5gjhhvj30u01uotej.jpg' />
