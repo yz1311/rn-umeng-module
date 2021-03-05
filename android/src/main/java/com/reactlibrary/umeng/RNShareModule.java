@@ -337,7 +337,12 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                     setFieldValueByName(target, fieldName, null);
                     break;
                 case String:
-                    setFieldValueByName(target, fieldName, map.getString(originalFieldName));
+                    //有部分是颜色，需要转换
+                    if(fieldName.endsWith("Color")) {
+                        setFieldValueByName(target, fieldName, Color.parseColor(map.getString(originalFieldName)));
+                    } else {
+                        setFieldValueByName(target, fieldName, map.getString(originalFieldName));
+                    }
                     break;
                 case Boolean:
                     setFieldValueByName(target, fieldName, map.getBoolean(originalFieldName));
