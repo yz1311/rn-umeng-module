@@ -147,3 +147,25 @@ export enum SHARE_MEDIAS {
     DINGTALK,   //钉钉
     MORE,    //系统菜单
 }
+
+
+export enum SHARE_BOARD_POSITIONS {
+    /**
+     * 顶部
+     */
+    SHAREBOARD_POSITION_TOP = 1,
+    /**
+     * 中间
+     */
+    SHAREBOARD_POSITION_CENTER = 2,
+    /**
+     * 底部(默认)
+     */
+    SHAREBOARD_POSITION_BOTTOM = 3,
+}
+
+export enum SHARE_MENU_BG_SHAPES {
+    BG_SHAPE_NONE,
+    BG_SHAPE_CIRCULAR,
+    BG_SHAPE_ROUNDED_SQUARE,
+}

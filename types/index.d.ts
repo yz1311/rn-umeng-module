@@ -1,6 +1,12 @@
 import AnalyticsUtil from "../lib/AnalyticsUtil";
 // import PushUtil from "../lib/PushUtil";
-import ShareUtil, {SHARE_MEDIAS, SHARE_STYLES, SAHRE_RESULT_CODES} from '../lib/ShareUtil';
+import ShareUtil, {
+    SHARE_MEDIAS,
+    SHARE_STYLES,
+    SAHRE_RESULT_CODES,
+    SHARE_BOARD_POSITIONS,
+    SHARE_MENU_BG_SHAPES,
+} from '../lib/ShareUtil';
 
 /**
  * 所有分类类型的基类型
@@ -34,6 +40,68 @@ export type BaseMediaObject = {
      * 暂不知作用
      */
     subject?: string;
+    /**
+     * 分享面板自定义配置
+     */
+    shareBoardConfig?: Partial<ShareBoardConfig>
+}
+
+export type ShareBoardConfig = {
+    /**
+     * 标题
+     * 默认: 选择要分享到的平台
+     */
+    titleText?: string;
+    titleVisibility?: boolean;
+    /**
+     * 标题颜色
+     * 默认: #575A5C
+     */
+    titleTextColor?: string;
+    /**
+     * 取消按钮文字
+     * 默认: 取消分享
+     */
+    cancelBtnText?: string;
+    cancelBtnVisibility?: boolean;
+    /**
+     * 取消按钮颜色
+     * 默认: #575A5C
+     */
+    cancelBtnColor?: string;
+    /**
+     * 默认: #ffffff
+     */
+    cancelBtnBgColor?: string;
+    /**
+     * 默认: #22000000
+     */
+    cancelBtnBgPressedColor?: string;
+    /**
+     * 位置
+     * 默认: 底部
+     */
+    shareboardPosition?: SHARE_BOARD_POSITIONS;
+    shareboardBgColor?: string;
+    /**
+     * 默认: NONE
+     */
+    menuBgShape?: SHARE_MENU_BG_SHAPES;
+    menuBgShapeAngle?: string;
+    menuBgColor?: string;
+    menuBgPressedColor?: string;
+    menuTextColor?: string;
+    menuIconPressedColor?: string;
+    topMargin?: number;
+    indicatorVisibility?: boolean;
+    /**
+     * 默认: "#C2C9CC
+     */
+    indicatorNormalColor?: string;
+    /**
+     * 默认: #0086DC
+     */
+    indicatorSelectedColor?: string;
 }
 
 
@@ -72,7 +140,7 @@ export interface UMWeb extends BaseMediaObject {
 /**
  * 图片Model
  */
-export interface UMImage extends Omit<BaseMediaObject, 'description'> {
+export interface UMImage extends Omit<BaseMediaObject, 'description'|'thumb'> {
     /**
      * 图片的描述
      */
@@ -82,6 +150,10 @@ export interface UMImage extends Omit<BaseMediaObject, 'description'> {
          * 图片的url
          */
         url: string;
+        /**
+         * 缩略图的地址
+         */
+        thumb: string;
         /**
          * 压缩质量(Android Only)
          * SCALE: 大小压缩，默认为大小压缩，适合普通很大的图
@@ -126,7 +198,7 @@ export interface UMVideo extends BaseMediaObject {
 /**
  * QQ不支持纯文本方式的分享，但QQ空间支持
  */
-export interface UMText extends Pick<BaseMediaObject, "description"> {
+export interface UMText extends Omit<BaseMediaObject, "thumb"|"title"> {
 
 }
 
@@ -144,5 +216,7 @@ export {
     ShareUtil,
     SHARE_MEDIAS,
     SHARE_STYLES,
-    SAHRE_RESULT_CODES
+    SAHRE_RESULT_CODES,
+    SHARE_BOARD_POSITIONS,
+    SHARE_MENU_BG_SHAPES,
 };

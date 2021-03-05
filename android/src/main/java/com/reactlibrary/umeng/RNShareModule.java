@@ -1,8 +1,10 @@
 package com.reactlibrary.umeng;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -14,6 +16,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMAuthListener;
@@ -27,6 +31,7 @@ import com.umeng.socialize.media.UMQQMini;
 import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.media.UMVideo;
 import com.umeng.socialize.media.UMusic;
+import com.umeng.socialize.shareboard.ShareBoardConfig;
 
 /**
  * Created by wangfei on 17/8/28.
@@ -165,7 +170,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         final ReadableArray shareMediaArr = shareObject.getArray("shareMedias");
         SHARE_MEDIA[] shareMediaValues = new SHARE_MEDIA[shareMediaArr.size()];
         for (int i = 0;i<shareMediaArr.size();i++) {
-            shareMediaValues[i] = SHARE_MEDIA.values()[shareMediaArr.getInt(i)];
+            shareMediaValues[i] = getShareMedia(shareMediaArr.getInt(i));
         }
         ShareAction action = new ShareAction(ma)
                 .setCallback(getUMShareListener(promise));
@@ -295,7 +300,70 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
                 break;
         }
-        action.share();
+        if(shareMediaValues.length == 1) {
+            action.share();
+        } else {
+            final ReadableMap shareBoardConfig = shareObject.getMap("shareBoardConfig");
+            final ShareBoardConfig config = new ShareBoardConfig();
+            if(shareBoardConfig!=null) {
+                ReadableMapKeySetIterator iter = shareBoardConfig.keySetIterator();
+                while (iter.hasNextKey()) {
+                    String key = iter.nextKey();
+                    //由于java中它的属性都是m开头，譬如js中是titleText,java中是mTitleText，需要转换下
+                    String realKey = "m"+key.substring(0,1).toUpperCase()+key.substring(1);
+                    checkKeyAndSet(shareBoardConfig, realKey, config, key);
+                }
+            }
+            if(config != null) {
+                action.open(config);
+            } else {
+                action.open();
+            }
+        }
+    }
+
+    private void checkKeyAndSet(ReadableMap map,String fieldName, Object target, String originalFieldName) {
+        if(originalFieldName == null) {
+            originalFieldName = fieldName;
+        }
+        try {
+            switch (map.getType(originalFieldName)) {
+                //不可能为这个
+                case Map:
+                case Array:
+
+                    break;
+                case Null:
+                    setFieldValueByName(target, fieldName, null);
+                    break;
+                case String:
+                    setFieldValueByName(target, fieldName, map.getString(originalFieldName));
+                    break;
+                case Boolean:
+                    setFieldValueByName(target, fieldName, map.getBoolean(originalFieldName));
+                    break;
+                case Number:
+                    setFieldValueByName(target, fieldName, map.getDouble(originalFieldName));
+                    break;
+            }
+        } catch (Exception e) {
+            Log.i("LINK","RNShareModule:checkKeyAndSet:"+e.getMessage());
+        }
+    }
+
+    private void setFieldValueByName(Object obj, String fieldName, Object value) {
+        try {
+            // 获取obj类的字节文件对象
+            Class c = obj.getClass();
+            // 获取该类的成员变量
+            Field f = c.getDeclaredField(fieldName);
+            // 取消语言访问检查
+            f.setAccessible(true);
+            // 给变量赋值
+            f.set(obj, value);
+        } catch (Exception e) {
+            Log.i("LINK","RNShareModule:setFieldValueByName:"+e.getMessage());
+        }
     }
 
     private SHARE_MEDIA getShareMedia(int num){
