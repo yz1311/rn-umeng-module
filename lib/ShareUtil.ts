@@ -46,6 +46,7 @@ export default class ShareUtil {
     /**
      * 授权
      * 成功或者取消都是resolve(根据code判断)，失败才是reject
+     * 微信授权成功后，一段时间内，再次授权不会弹出授权界面，直接返回数据
      * @param shareMedia
      */
     static auth = (shareMedia: SHARE_MEDIAS):
