@@ -78,7 +78,7 @@ export type ShareBoardConfig = {
      */
     cancelBtnBgPressedColor?: string;
     /**
-     * 位置
+     * 位置(ios不支持顶部)
      * 默认: 底部
      */
     shareboardPosition?: SHARE_BOARD_POSITIONS;
@@ -91,8 +91,10 @@ export type ShareBoardConfig = {
     menuBgColor?: string;
     menuBgPressedColor?: string;
     menuTextColor?: string;
+    /**
+     * (Android Only)
+     */
     menuIconPressedColor?: string;
-    topMargin?: number;
     indicatorVisibility?: boolean;
     /**
      * 默认: "#C2C9CC

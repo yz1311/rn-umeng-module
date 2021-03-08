@@ -200,6 +200,75 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareStyle shareObject:(NSDictionary *)shareO
        }];
       } else {
           //调用分享面板
+          //#region 配置
+          NSDictionary *shareBoardConfig = [RCTConvert NSDictionary:shareObject[@"shareBoardConfig"]];
+          if(shareBoardConfig != nil && shareBoardConfig != NULL) {
+              //标题
+              if([shareBoardConfig objectForKey:@"titleText"]) {
+                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleString = [RCTConvert NSString:shareObject[@"titleText"]];
+              }
+              if([shareBoardConfig objectForKey:@"titleVisibility"]) {
+                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.isShow = [RCTConvert BOOL:shareObject[@"titleVisibility"]];
+              }
+              if([shareBoardConfig objectForKey:@"titleTextColor"]) {
+                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"titleTextColor"]]];
+              }
+              //取消按钮
+              if([shareBoardConfig objectForKey:@"cancelBtnText"]) {
+                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlText = [RCTConvert NSString:shareObject[@"cancelBtnText"]];
+              }
+              if([shareBoardConfig objectForKey:@"cancelBtnVisibility"]) {
+                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.isShow = [RCTConvert BOOL:shareObject[@"cancelBtnVisibility"]];
+              }
+              if([shareBoardConfig objectForKey:@"cancelBtnColor"]) {
+                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlTextColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"cancelBtnBgColor"]) {
+                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"cancelBtnBgPressedColor"]) {
+                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgPressedColor"]]];
+              }
+              //位置
+              if([shareBoardConfig objectForKey:@"shareboardPosition"]) {
+                  switch ([RCTConvert int:shareObject[@"cancelBtnVisibility"]]) {
+                      case 2:
+                          [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Middle;
+                          break;
+                      //ios不支持显示在顶部
+                      case 1:
+                      case 3:
+                      default:
+                          [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Bottom;
+                          break;
+                  }
+
+              }
+              //项背景色
+              if([shareBoardConfig objectForKey:@"shareboardBgColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"shareboardBgColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"menuBgColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"menuBgPressedColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgPressedColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"menuTextColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewPlatformNameColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuTextColor"]]];
+              }
+              //指示器
+              if([shareBoardConfig objectForKey:@"indicatorVisibility"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.isShow = [RCTConvert BOOL:shareObject[@"indicatorVisibility"]];
+              }
+              if([shareBoardConfig objectForKey:@"indicatorNormalColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorNormalColor"]]];
+              }
+              if([shareBoardConfig objectForKey:@"indicatorSelectedColor"]) {
+                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlCurrentPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorSelectedColor"]]];
+              }
+          }
+          //#enregion
           //设置分享的平台
           [UMSocialUIManager setPreDefinePlatforms:shareMediaArr];
           [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
