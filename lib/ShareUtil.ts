@@ -1,4 +1,4 @@
-import {BaseMediaObject} from "../types";
+import {BaseMediaObject, UmengAuthResponse} from "../types";
 import {
     Platform,
     NativeModules
@@ -49,7 +49,7 @@ export default class ShareUtil {
      * @param shareMedia
      */
     static auth = (shareMedia: SHARE_MEDIAS):
-        Promise<{shareMedia: SHARE_MEDIAS,code: SAHRE_RESULT_CODES, data?: Record<string, string>, message?: string}> => {
+        Promise<{shareMedia: SHARE_MEDIAS,code: SAHRE_RESULT_CODES, data?: UmengAuthResponse, message?: string}> => {
         return UMShareModule.auth(shareMedia);
     }
 }

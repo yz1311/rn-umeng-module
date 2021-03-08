@@ -212,6 +212,23 @@ export type UMEmoji = {
 
 } & BaseMediaObject;
 
+export interface UmengAuthResponse {
+    uid: string;	//uid
+    unionid: string; //	unionid
+    openid: string; //	openid
+    accessToken: string; //	accessToken
+    refreshToken: string; //	refreshToken
+    expiration: number;
+    screen_name: string; //	用户名
+    name: string; //	用户名
+    iconurl: string; //	头像
+    gender: string; //	gender
+    country: string;
+    province: string;
+    city: string;
+    [key:string]: any;
+}
+
 export {
     AnalyticsUtil,
     // PushUtil,
