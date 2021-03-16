@@ -27,7 +27,7 @@ export type BaseMediaObject = {
     /**
      * 其他
      */
-    extra: Record<string, Object>;
+    extra?: Record<string, Object>;
     /**
      * 平台(如果长度为1，则调用指定平台，否则调用默认的分享面板)
      */
@@ -110,7 +110,7 @@ export type ShareBoardConfig = {
 /**
  * 小程序(支持微信和QQ)
  */
-export interface UMMini extends Omit<BaseMediaObject, 'shareMedia'> {
+export interface UMMini extends Omit<BaseMediaObject, 'shareMedias'|'title'|'description'|'shareBoardConfig'> {
     /**
      * 若客户端版本低于6.5.6或在iPad客户端接收，小程序类型分享将自动转成网页类型分享。开发者必须填写网页链接字段，确保低版本客户端能正常打开网页链接。
      */

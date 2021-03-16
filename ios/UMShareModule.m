@@ -78,7 +78,7 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareStyle shareObject:(NSDictionary *)shareO
           case 2:
           {
               NSString *path = [RCTConvert NSString:shareObject[@"path"]];
-              NSString *userName = [RCTConvert NSString:shareObject[@"userName"]];
+              NSString *userName = [RCTConvert NSString:shareObject[@"miniAppId"]];
               NSString *url = [RCTConvert NSString:shareObject[@"url"]];
               NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
               UIImage* icon = [self getImage:thumb];
