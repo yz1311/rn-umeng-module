@@ -311,6 +311,26 @@ defaultConfig {
     }
 ```
 
+* 7.混淆设置
+```javascript
+-keep class com.umeng.** {*;}
+//u-apm
+-keep class com.uc.** { *; }
+
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep public class com.xiaoquexin.app.R$*{
+    public static final int *;
+}
+```
+
 ## 使用
 
 ### 统计
