@@ -3,6 +3,7 @@
           package="com.reactlibrary.umeng">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <!--  如果需要使用QQ纯图分享或避免其它平台纯图分享的时候图片不被压缩，可以增加以下权限： -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
