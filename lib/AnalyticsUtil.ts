@@ -7,6 +7,7 @@ const UMAnalyticsModule = NativeModules.UMAnalyticsModule;
 export default class AnalyticsUtil {
     /**
      * 手动页面统计接口
+     * 调用时机: 页面可见的时候
      * @param pageName 页面名称
      */
     static onPageStart = (pageName: string) => {
@@ -15,6 +16,7 @@ export default class AnalyticsUtil {
 
     /**
      * 手动页面统计接口
+     * 调用时机: 页面不可见的时候，包括被其他页面覆盖或者被销毁
      * @param pageName 页面名称
      */
     static onPageEnd = (pageName: string) => {

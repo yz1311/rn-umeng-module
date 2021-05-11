@@ -1,7 +1,7 @@
 
 {
   "name": "rn-umeng-module",
-  "version": "0.0.5",
+  "version": "1.0.1",
   "description": "umeng统计、分享、登录 for react-native\n\n",
   "main": "index.js",
   "types": "types/index.d.ts",

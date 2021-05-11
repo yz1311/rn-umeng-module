@@ -55,233 +55,235 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareStyle shareObject:(NSDictionary *)shareO
 - (void)invokeShare:(NSInteger)shareStyle shareObject:(NSDictionary *)shareObject resolve:(RCTPromiseResolveBlock)resolve
              reject:(RCTPromiseRejectBlock)reject
 {
-    NSString *title = [RCTConvert NSString:shareObject[@"title"]];
-    NSString *description = [RCTConvert NSString:shareObject[@"description"]];
-    NSArray *shareMediaArr = [RCTConvert NSArray:shareObject[@"shareMedias"]];
-      UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
-      switch (shareStyle) {
-          //网页链接（网页H5链接）
-          case 0:
-          {
-              NSString *url = [RCTConvert NSString:shareObject[@"url"]];
-              NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
-              UIImage* icon = [self getImage:thumb];
-              //创建网页内容对象
-              UMShareWebpageObject *shareObj = [UMShareWebpageObject shareObjectWithTitle:title descr:description thumImage:icon];
-              shareObj.webpageUrl = url;
-              messageObject.shareObject = shareObj;
-          }
-              break;
-          //微信小程序
-          //QQ小程序
-          case 1:
-          case 2:
-          {
-              NSString *path = [RCTConvert NSString:shareObject[@"path"]];
-              NSString *userName = [RCTConvert NSString:shareObject[@"userName"]];
-              NSString *url = [RCTConvert NSString:shareObject[@"url"]];
-              NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
-              UIImage* icon = [self getImage:thumb];
-              UMShareMiniProgramObject *shareObj = [UMShareMiniProgramObject shareObjectWithTitle:title descr:description thumImage:icon];
-              shareObj.webpageUrl = url;
-              shareObj.userName = userName;
-              shareObj.path = path;
-              shareObj.hdImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png"]];
-              shareObj.miniProgramType = UShareWXMiniProgramTypeRelease; // 可选体验版和开发板
-              messageObject.shareObject = shareObj;
-          }
-              break;
-          //图片
-          case 3:
-          {
-              NSArray* images = [RCTConvert NSArray:shareObject[@"images"]];
-              if(images.count != 1) {
-                  reject(@"0", @"单图分享只支持一张图片", nil);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *title = [RCTConvert NSString:shareObject[@"title"]];
+        NSString *description = [RCTConvert NSString:shareObject[@"description"]];
+        NSArray *shareMediaArr = [RCTConvert NSArray:shareObject[@"shareMedias"]];
+          UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+          switch (shareStyle) {
+              //网页链接（网页H5链接）
+              case 0:
+              {
+                  NSString *url = [RCTConvert NSString:shareObject[@"url"]];
+                  NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
+                  UIImage* icon = [self getImage:thumb];
+                  //创建网页内容对象
+                  UMShareWebpageObject *shareObj = [UMShareWebpageObject shareObjectWithTitle:title descr:description thumImage:icon];
+                  shareObj.webpageUrl = url;
+                  messageObject.shareObject = shareObj;
               }
-              NSDictionary* first = [images objectAtIndex:0];
-              NSString *url = [NSString stringWithFormat:@"%@",[first objectForKey:@"url"]];
-              NSString *thumb = [NSString stringWithFormat:@"%@",[first objectForKey:@"thumb"]];
-              UMShareImageObject *shareObj = [[UMShareImageObject alloc] init];
-              //如果有缩略图，则设置缩略图
-              if(thumb!=nil && [thumb length]>0) {
-                  shareObj.thumbImage = [self getImage:thumb];
+                  break;
+              //微信小程序
+              //QQ小程序
+              case 1:
+              case 2:
+              {
+                  NSString *path = [RCTConvert NSString:shareObject[@"path"]];
+                  NSString *userName = [RCTConvert NSString:shareObject[@"userName"]];
+                  NSString *url = [RCTConvert NSString:shareObject[@"url"]];
+                  NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
+                  UIImage* icon = [self getImage:thumb];
+                  UMShareMiniProgramObject *shareObj = [UMShareMiniProgramObject shareObjectWithTitle:title descr:description thumImage:icon];
+                  shareObj.webpageUrl = url;
+                  shareObj.userName = userName;
+                  shareObj.path = path;
+                  shareObj.hdImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png"]];
+                  shareObj.miniProgramType = UShareWXMiniProgramTypeRelease; // 可选体验版和开发板
+                  messageObject.shareObject = shareObj;
               }
-              [shareObj setShareImage:url];
-              messageObject.shareObject = shareObj;
-          }
-              break;
-          //纯文本
-          case 4:
-          {
-              messageObject.text = title;
-          }
-              break;
-          //多图（多图要包含文字描述）(ios的接口不支持多图)
-          case 5:
-          {
-              messageObject.text = title;
-              NSArray* images = [RCTConvert NSArray:shareObject[@"images"]];
-              if(images.count != 1) {
-                  reject(@"0", @"单图分享只支持一张图片", nil);
-              }
-              NSDictionary* first = [images objectAtIndex:0];
-              NSString *url = [NSString stringWithFormat:@"%@",[first objectForKey:@"url"]];
-              NSString *thumb = [NSString stringWithFormat:@"%@",[first objectForKey:@"thumb"]];
-              UMShareImageObject *shareObj = [[UMShareImageObject alloc] init];
-              //如果有缩略图，则设置缩略图
-              if(thumb!=nil && [thumb length]>0) {
-                  shareObj.thumbImage = [self getImage:thumb];
-              }
-              [shareObj setShareImage:url];
-              messageObject.shareObject = shareObj;
-
-          }
-              break;
-          //视频
-          case 6:
-          {
-              NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
-              NSString *url = [RCTConvert NSString:shareObject[@"url"]];
-              UIImage* icon = [self getImage:thumb];
-              UMShareVideoObject *shareObj = [UMShareVideoObject shareObjectWithTitle:title descr:description thumImage:icon];
-              shareObj.videoUrl = url;
-              messageObject.shareObject = shareObj;
-          }
-              break;
-          //音乐
-          case 7:
-          {
-              NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
-              NSString *url = [RCTConvert NSString:shareObject[@"url"]];
-              NSString *targetUrl = [RCTConvert NSString:shareObject[@"targetUrl"]];
-              UIImage* icon = [self getImage:thumb];
-              UMShareMusicObject *shareObj = [UMShareMusicObject shareObjectWithTitle:title descr:description thumImage:icon];
-              shareObj.musicUrl = url;
-              shareObj.musicDataUrl = targetUrl;
-              messageObject.shareObject = shareObj;
-          }
-              break;
-          //表情（GIF图片，即Emotion类型，只有微信支持）
-          case 8:
-
-              break;
-      }
-      if([shareMediaArr count] == 1) {
-          [[UMSocialManager defaultManager] shareToPlatform:[self platformType:(NSNumber*)[shareMediaArr objectAtIndex:0]] messageObject:messageObject currentViewController:nil completion:^(id data, NSError *error) {
-           if (error) {
-               NSString *msg = error.userInfo[@"NSLocalizedFailureReason"];
-               if (!msg) {
-                 msg = error.userInfo[@"message"];
-               }if (!msg) {
-                 msg = @"share failed";
-               }
-               NSInteger stCode = error.code;
-               reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
-           }else{
-               if ([data isKindOfClass:[UMSocialShareResponse class]]) {
-                   UMSocialShareResponse *resp = data;
-                   //分享结果消息
-                   NSLog(@"response message is %@",resp.message);
-                   resolve(@{
-                       @"shareMedia": [NSNumber numberWithInt:[(NSNumber*)[shareMediaArr objectAtIndex:0] intValue]],
-                       @"code": @200,
-                       @"message": resp.message,
-                       @"originalResponse": resp.originalResponse
-                   });
-               }else{
-                   NSLog(@"response data is %@",data);
-                   resolve(@{
-                       @"shareMedia": [NSNumber numberWithInt:[(NSNumber*)[shareMediaArr objectAtIndex:0] intValue]],
-                       @"code": @200,
-                       @"originalResponse": data
-                   });
-               }
-           }
-       }];
-      } else {
-          //调用分享面板
-          //#region 配置
-          NSDictionary *shareBoardConfig = [RCTConvert NSDictionary:shareObject[@"shareBoardConfig"]];
-          if(shareBoardConfig != nil && shareBoardConfig != NULL) {
-              //标题
-              if([shareBoardConfig objectForKey:@"titleText"]) {
-                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleString = [RCTConvert NSString:shareObject[@"titleText"]];
-              }
-              if([shareBoardConfig objectForKey:@"titleVisibility"]) {
-                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.isShow = [RCTConvert BOOL:shareObject[@"titleVisibility"]];
-              }
-              if([shareBoardConfig objectForKey:@"titleTextColor"]) {
-                  [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"titleTextColor"]]];
-              }
-              //取消按钮
-              if([shareBoardConfig objectForKey:@"cancelBtnText"]) {
-                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlText = [RCTConvert NSString:shareObject[@"cancelBtnText"]];
-              }
-              if([shareBoardConfig objectForKey:@"cancelBtnVisibility"]) {
-                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.isShow = [RCTConvert BOOL:shareObject[@"cancelBtnVisibility"]];
-              }
-              if([shareBoardConfig objectForKey:@"cancelBtnColor"]) {
-                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlTextColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnColor"]]];
-              }
-              if([shareBoardConfig objectForKey:@"cancelBtnBgColor"]) {
-                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgColor"]]];
-              }
-              if([shareBoardConfig objectForKey:@"cancelBtnBgPressedColor"]) {
-                  [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgPressedColor"]]];
-              }
-              //位置
-              if([shareBoardConfig objectForKey:@"shareboardPosition"]) {
-                  switch ([RCTConvert int:shareObject[@"cancelBtnVisibility"]]) {
-                      case 2:
-                          [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Middle;
-                          break;
-                      //ios不支持显示在顶部
-                      case 1:
-                      case 3:
-                      default:
-                          [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Bottom;
-                          break;
+                  break;
+              //图片
+              case 3:
+              {
+                  NSArray* images = [RCTConvert NSArray:shareObject[@"images"]];
+                  if(images.count != 1) {
+                      reject(@"0", @"单图分享只支持一张图片", nil);
                   }
+                  NSDictionary* first = [images objectAtIndex:0];
+                  NSString *url = [NSString stringWithFormat:@"%@",[first objectForKey:@"url"]];
+                  NSString *thumb = [NSString stringWithFormat:@"%@",[first objectForKey:@"thumb"]];
+                  UMShareImageObject *shareObj = [[UMShareImageObject alloc] init];
+                  //如果有缩略图，则设置缩略图
+                  if(thumb!=nil && [thumb length]>0) {
+                      shareObj.thumbImage = [self getImage:thumb];
+                  }
+                  [shareObj setShareImage:[self getImage:url]];
+                  messageObject.shareObject = shareObj;
+              }
+                  break;
+              //纯文本
+              case 4:
+              {
+                  messageObject.text = title;
+              }
+                  break;
+              //多图（多图要包含文字描述）(ios的接口不支持多图)
+              case 5:
+              {
+                  messageObject.text = title;
+                  NSArray* images = [RCTConvert NSArray:shareObject[@"images"]];
+                  if(images.count != 1) {
+                      reject(@"0", @"单图分享只支持一张图片", nil);
+                  }
+                  NSDictionary* first = [images objectAtIndex:0];
+                  NSString *url = [NSString stringWithFormat:@"%@",[first objectForKey:@"url"]];
+                  NSString *thumb = [NSString stringWithFormat:@"%@",[first objectForKey:@"thumb"]];
+                  UMShareImageObject *shareObj = [[UMShareImageObject alloc] init];
+                  //如果有缩略图，则设置缩略图
+                  if(thumb!=nil && [thumb length]>0) {
+                      shareObj.thumbImage = [self getImage:thumb];
+                  }
+                  [shareObj setShareImage:[self getImage:url]];
+                  messageObject.shareObject = shareObj;
 
               }
-              //项背景色
-              if([shareBoardConfig objectForKey:@"shareboardBgColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"shareboardBgColor"]]];
+                  break;
+              //视频
+              case 6:
+              {
+                  NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
+                  NSString *url = [RCTConvert NSString:shareObject[@"url"]];
+                  UIImage* icon = [self getImage:thumb];
+                  UMShareVideoObject *shareObj = [UMShareVideoObject shareObjectWithTitle:title descr:description thumImage:icon];
+                  shareObj.videoUrl = url;
+                  messageObject.shareObject = shareObj;
               }
-              if([shareBoardConfig objectForKey:@"menuBgColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgColor"]]];
+                  break;
+              //音乐
+              case 7:
+              {
+                  NSString *thumb = [RCTConvert NSString:shareObject[@"thumb"]];
+                  NSString *url = [RCTConvert NSString:shareObject[@"url"]];
+                  NSString *targetUrl = [RCTConvert NSString:shareObject[@"targetUrl"]];
+                  UIImage* icon = [self getImage:thumb];
+                  UMShareMusicObject *shareObj = [UMShareMusicObject shareObjectWithTitle:title descr:description thumImage:icon];
+                  shareObj.musicUrl = url;
+                  shareObj.musicDataUrl = targetUrl;
+                  messageObject.shareObject = shareObj;
               }
-              if([shareBoardConfig objectForKey:@"menuBgPressedColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgPressedColor"]]];
-              }
-              if([shareBoardConfig objectForKey:@"menuTextColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewPlatformNameColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuTextColor"]]];
-              }
-              //指示器
-              if([shareBoardConfig objectForKey:@"indicatorVisibility"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.isShow = [RCTConvert BOOL:shareObject[@"indicatorVisibility"]];
-              }
-              if([shareBoardConfig objectForKey:@"indicatorNormalColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorNormalColor"]]];
-              }
-              if([shareBoardConfig objectForKey:@"indicatorSelectedColor"]) {
-                  [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlCurrentPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorSelectedColor"]]];
-              }
+                  break;
+              //表情（GIF图片，即Emotion类型，只有微信支持）
+              case 8:
+
+                  break;
           }
-          //#enregion
-          //设置分享的平台
-          [UMSocialUIManager setPreDefinePlatforms:shareMediaArr];
-          [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
-              //获取到选中的平台，重新调用接口
-              NSArray* newShareMedias = @[@((int)platformType)];
-              [shareObject setValue:newShareMedias forKey:@"shareMedias"];
-              [self invokeShare:shareStyle shareObject:shareObject resolve:resolve reject:reject];
-          }];
-      }
+          if([shareMediaArr count] == 1) {
+              [[UMSocialManager defaultManager] shareToPlatform:[self platformType:(NSNumber*)[shareMediaArr objectAtIndex:0]] messageObject:messageObject currentViewController:nil completion:^(id data, NSError *error) {
+               if (error) {
+                   NSString *msg = error.userInfo[@"NSLocalizedFailureReason"];
+                   if (!msg) {
+                     msg = error.userInfo[@"message"];
+                   }if (!msg) {
+                     msg = @"share failed";
+                   }
+                   NSInteger stCode = error.code;
+                   reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
+               }else{
+                   if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                       UMSocialShareResponse *resp = data;
+                       //分享结果消息
+                       NSLog(@"response message is %@",resp.message);
+                       resolve(@{
+                           @"shareMedia": @((int)[shareMediaArr objectAtIndex:0]),
+                           @"code": @200,
+                           @"message": resp.message==nil?@"":resp.message,
+                           @"originalResponse": resp.originalResponse
+                       });
+                   }else{
+                       NSLog(@"response data is %@",data);
+                       resolve(@{
+                           @"shareMedia": @((int)[shareMediaArr objectAtIndex:0]),
+                           @"code": @200,
+                           @"originalResponse": data
+                       });
+                   }
+               }
+           }];
+          } else {
+              //调用分享面板
+              //#region 配置
+              NSDictionary *shareBoardConfig = [RCTConvert NSDictionary:shareObject[@"shareBoardConfig"]];
+              if(shareBoardConfig != nil && shareBoardConfig != NULL) {
+                  //标题
+                  if([shareBoardConfig objectForKey:@"titleText"]) {
+                      [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleString = [RCTConvert NSString:shareObject[@"titleText"]];
+                  }
+                  if([shareBoardConfig objectForKey:@"titleVisibility"]) {
+                      [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.isShow = [RCTConvert BOOL:shareObject[@"titleVisibility"]];
+                  }
+                  if([shareBoardConfig objectForKey:@"titleTextColor"]) {
+                      [UMSocialShareUIConfig shareInstance].shareTitleViewConfig.shareTitleViewTitleColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"titleTextColor"]]];
+                  }
+                  //取消按钮
+                  if([shareBoardConfig objectForKey:@"cancelBtnText"]) {
+                      [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlText = [RCTConvert NSString:shareObject[@"cancelBtnText"]];
+                  }
+                  if([shareBoardConfig objectForKey:@"cancelBtnVisibility"]) {
+                      [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.isShow = [RCTConvert BOOL:shareObject[@"cancelBtnVisibility"]];
+                  }
+                  if([shareBoardConfig objectForKey:@"cancelBtnColor"]) {
+                      [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlTextColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"cancelBtnBgColor"]) {
+                      [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"cancelBtnBgPressedColor"]) {
+                      [UMSocialShareUIConfig shareInstance].shareCancelControlConfig.shareCancelControlBackgroundColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"cancelBtnBgPressedColor"]]];
+                  }
+                  //位置
+                  if([shareBoardConfig objectForKey:@"shareboardPosition"]) {
+                      switch ([RCTConvert int:shareObject[@"cancelBtnVisibility"]]) {
+                          case 2:
+                              [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Middle;
+                              break;
+                          //ios不支持显示在顶部
+                          case 1:
+                          case 3:
+                          default:
+                              [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewPostionType = UMSocialSharePageGroupViewPositionType_Bottom;
+                              break;
+                      }
+
+                  }
+                  //项背景色
+                  if([shareBoardConfig objectForKey:@"shareboardBgColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePageGroupViewConfig.sharePageGroupViewBackgroundColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"shareboardBgColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"menuBgColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"menuBgPressedColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewBGRadiusColorPressed = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuBgPressedColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"menuTextColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePlatformItemViewConfig.sharePlatformItemViewPlatformNameColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"menuTextColor"]]];
+                  }
+                  //指示器
+                  if([shareBoardConfig objectForKey:@"indicatorVisibility"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePageControlConfig.isShow = [RCTConvert BOOL:shareObject[@"indicatorVisibility"]];
+                  }
+                  if([shareBoardConfig objectForKey:@"indicatorNormalColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorNormalColor"]]];
+                  }
+                  if([shareBoardConfig objectForKey:@"indicatorSelectedColor"]) {
+                      [UMSocialShareUIConfig shareInstance].sharePageControlConfig.sharePageControlCurrentPageIndicatorTintColor = [UMSocialUIUtility colorWithHexString:[RCTConvert NSString:shareObject[@"indicatorSelectedColor"]]];
+                  }
+              }
+              //#enregion
+              //设置分享的平台
+              [UMSocialUIManager setPreDefinePlatforms:shareMediaArr];
+              [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
+                  //获取到选中的平台，重新调用接口
+                  NSArray* newShareMedias = @[@((int)platformType)];
+                  [shareObject setValue:newShareMedias forKey:@"shareMedias"];
+                  [self invokeShare:shareStyle shareObject:shareObject resolve:resolve reject:reject];
+              }];
+          }
+    });
 }
 
 
-RCT_EXPORT_METHOD(auth:(NSNumber*)platform resolve:(RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(auth:(NSInteger)platform resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
 //  UMSocialPlatformType plf = [self platformType:platform];
@@ -292,46 +294,47 @@ RCT_EXPORT_METHOD(auth:(NSNumber*)platform resolve:(RCTPromiseResolveBlock)resol
 //    }
 //  }
 //
-  [[UMSocialManager defaultManager] getUserInfoWithPlatform:[self platformType:platform] currentViewController:nil completion:^(id result, NSError *error) {
-      if (error) {
-        NSString *msg = error.userInfo[@"NSLocalizedFailureReason"];
-        if (!msg) {
-          msg = error.userInfo[@"message"];
-        }if (!msg) {
-          msg = @"auth failed";
-        }
-        NSInteger stCode = error.code;
-        reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
-      } else {
-        UMSocialUserInfoResponse *authInfo = result;
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [[UMSocialManager defaultManager] getUserInfoWithPlatform:[self platformType:[NSNumber numberWithInteger:platform]] currentViewController:nil completion:^(id result, NSError *error) {
+          if (error) {
+            NSString *msg = error.userInfo[@"NSLocalizedFailureReason"];
+            if (!msg) {
+              msg = error.userInfo[@"message"];
+            }if (!msg) {
+              msg = @"auth failed";
+            }
+            NSInteger stCode = error.code;
+            reject([NSString stringWithFormat:@"%ld", stCode], msg, error);
+          } else {
+            UMSocialUserInfoResponse *authInfo = result;
 
-        NSMutableDictionary *retDict = [NSMutableDictionary dictionaryWithCapacity:8];
-        retDict[@"uid"] = authInfo.uid;
-        retDict[@"openid"] = authInfo.openid;
-        retDict[@"unionid"] = authInfo.unionId;
-        retDict[@"accessToken"] = authInfo.accessToken;
-        retDict[@"refreshToken"] = authInfo.refreshToken;
-        retDict[@"expiration"] = authInfo.expiration;
+            NSMutableDictionary *retDict = [NSMutableDictionary dictionaryWithCapacity:8];
+            retDict[@"uid"] = authInfo.uid;
+            retDict[@"openid"] = authInfo.openid;
+            retDict[@"unionid"] = authInfo.unionId;
+            retDict[@"accessToken"] = authInfo.accessToken;
+            retDict[@"refreshToken"] = authInfo.refreshToken;
+            retDict[@"expiration"] = authInfo.expiration;
 
-        retDict[@"name"] = authInfo.name;
-        retDict[@"iconurl"] = authInfo.iconurl;
-        retDict[@"gender"] = authInfo.unionGender;
+            retDict[@"name"] = authInfo.name;
+            retDict[@"iconurl"] = authInfo.iconurl;
+            retDict[@"gender"] = authInfo.unionGender;
 
-        NSDictionary *originInfo = authInfo.originalResponse;
-        retDict[@"city"] = originInfo[@"city"];
-        retDict[@"province"] = originInfo[@"province"];
-        retDict[@"country"] = originInfo[@"country"];
+            NSDictionary *originInfo = authInfo.originalResponse;
+            retDict[@"city"] = originInfo[@"city"];
+            retDict[@"province"] = originInfo[@"province"];
+            retDict[@"country"] = originInfo[@"country"];
 
-        resolve(@{
-          @"shareMedia": @((int)platform),
-          @"code": @200,
-          @"data": retDict,
-          @"message": @"",
-          @"originalResponse": authInfo.originalResponse
-        });
-      }
-  }];
-
+            resolve(@{
+              @"shareMedia": @((int)platform),
+              @"code": @200,
+              @"data": retDict,
+              @"message": @"",
+              @"originalResponse": authInfo.originalResponse
+            });
+          }
+      }];
+    });
 }
 
 

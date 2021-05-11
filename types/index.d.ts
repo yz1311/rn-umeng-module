@@ -27,7 +27,7 @@ export type BaseMediaObject = {
     /**
      * 其他
      */
-    extra: Record<string, Object>;
+    extra?: Record<string, Object>;
     /**
      * 平台(如果长度为1，则调用指定平台，否则调用默认的分享面板)
      */
@@ -110,7 +110,7 @@ export type ShareBoardConfig = {
 /**
  * 小程序(支持微信和QQ)
  */
-export interface UMMini extends Omit<BaseMediaObject, 'shareMedia'> {
+export interface UMMini extends Omit<BaseMediaObject, 'shareMedias'|'title'|'description'|'shareBoardConfig'> {
     /**
      * 若客户端版本低于6.5.6或在iPad客户端接收，小程序类型分享将自动转成网页类型分享。开发者必须填写网页链接字段，确保低版本客户端能正常打开网页链接。
      */
@@ -153,20 +153,20 @@ export interface UMImage extends Omit<BaseMediaObject, 'description'|'thumb'> {
          */
         url: string;
         /**
-         * 缩略图的地址
+         * 缩略图的地址(部分平台需要设置)
          */
-        thumb: string;
+        thumb?: string;
         /**
          * 压缩质量(Android Only)
          * SCALE: 大小压缩，默认为大小压缩，适合普通很大的图
          * QUALITY: 质量压缩，适合长图的分享
          */
-        compressStyle: 'SCALE' | 'QUALITY',
+        compressStyle?: 'SCALE' | 'QUALITY',
         /**
          * 压缩格式(Android Only)
          * 用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
          */
-        compressFormat: 'JPEG' | 'PNG' | 'WEBP'
+        compressFormat?: 'JPEG' | 'PNG' | 'WEBP'
     }>
 
 };

@@ -15,7 +15,7 @@ export default class ShareUtil {
      * @param shareStyle
      * @param shareObject
      */
-    static share = (shareStyle: SHARE_STYLES, shareObject: BaseMediaObject):
+    static share = (shareStyle: SHARE_STYLES, shareObject: BaseMediaObject | any):
         Promise<{shareMedia: SHARE_MEDIAS,code: SAHRE_RESULT_CODES, message?: string}> => {
         if(!shareObject) {
             console.warn('shareObject不能为空');

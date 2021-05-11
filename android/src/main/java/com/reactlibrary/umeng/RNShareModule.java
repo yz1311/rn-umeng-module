@@ -1,5 +1,6 @@
 package com.reactlibrary.umeng;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -109,7 +110,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         }else if(url.startsWith("http")){
             return new UMImage(ma,url);
         }else if(url.startsWith("/")){
-            return new UMImage(ma,url);
+            return new UMImage(ma,new File(url));
         }else if(url.startsWith("res")){
             return new UMImage(ma, ResContainer.getResourceId(ma,"drawable",url.replace("res/","")));
         }else {

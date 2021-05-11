@@ -304,9 +304,15 @@ defaultConfig {
       SoLoader.init(this, /* native exopackage */ false);
       RNUMConfigure.init(this, "59892f08310c9307b60023d0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
       PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+      //分享本地图片需要设置fileProvider
+      PlatformConfig.setWXFileProvider(getPackageName()+".fileprovider");
       //QQ和QQ空间的appId
       PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+      //分享本地图片需要设置fileProvider
+      PlatformConfig.setQQFileProvider(getPackageName()+".fileprovider");
       PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+      //分享本地图片需要设置fileProvider
+      PlatformConfig.setSinaFileProvider(getPackageName()+".fileprovider");
       ...
   }
 ```
