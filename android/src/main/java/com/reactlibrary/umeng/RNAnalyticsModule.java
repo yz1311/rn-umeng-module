@@ -40,6 +40,11 @@ public class RNAnalyticsModule extends ReactContextBaseJavaModule {
         return "UMAnalyticsModule";
     }
 
+    @ReactMethod
+    public void init(final int type, final String secret) {
+        RNUMConfigure.init(type, secret);
+    }
+
     /********************************U-App统计*********************************/
     @ReactMethod
     public void onPageStart(String pageName) {

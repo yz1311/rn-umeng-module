@@ -34,6 +34,12 @@ $ pod install
 ```javascript
 import {AnalyticsUtil, ShareUtil, UMWeb} from 'rn-umeng-module';
 
+//必须要初始化，必须要初始化，必须要初始化
+//建议在用户同意隐私协议后才进行初始化
+//https://developer.umeng.com/docs/119267/detail/182050
+//ios未实现，但是不用区分平台调用(会被直接忽略)
+AnalyticsUtil.init();
+
 //统计
 AnalyticsUtil.onPageStart("HomeIndex");
 ...

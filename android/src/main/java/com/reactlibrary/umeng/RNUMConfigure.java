@@ -13,10 +13,23 @@ import com.umeng.commonsdk.UMConfigure;
  */
 
 public class RNUMConfigure {
-    public static void init(Context context, String appkey, String channel, int type, String secret){
+    private static Context context = null;
+    private static String appKey = "";
+    private static String channel = "";
+
+    public static void preInit(Context context, String appkey, String channel) {
         initRN("react-native","2.0");
-        UMConfigure.init(context,appkey,channel,type,secret);
+        UMConfigure.preInit(context, appkey, channel);
+        //保存起来，用于init的初始化
+        RNUMConfigure.context = context;
+        RNUMConfigure.appKey = appkey;
+        RNUMConfigure.channel = channel;
     }
+
+    public static void init(int type, String secret){
+        UMConfigure.init(context,appKey,channel,type,secret);
+    }
+
     @TargetApi(VERSION_CODES.KITKAT)
     private static void initRN(String v, String t){
         Method method = null;

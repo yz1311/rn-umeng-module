@@ -1,3 +1,13 @@
+# 1.0.3 (2020-05-28)
+https://developer.umeng.com/docs/128606/detail/193672
+
+由于应用宝等部分市场加强了隐私政策，所以现在将init拆分到js中进行
+(ios不需要实现，调用init不用区分平台)，MainApplication中用preInit进行预初始化
+
+* 更换android的包的maven地址
+* 优化文档
+
+
 # 1.0.2 (2020-05-11)
 ## 修复
 * ios授权失败的问题

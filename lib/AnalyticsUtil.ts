@@ -1,10 +1,43 @@
 /**
  * Created by wangfei on 17/8/30.
  */
-var { NativeModules } = require('react-native');
+var { NativeModules, Platform } = require('react-native');
 const UMAnalyticsModule = NativeModules.UMAnalyticsModule;
 
 export default class AnalyticsUtil {
+    //是否已经初始化过了
+    private static initialed = false;
+    /**
+     * umeng的初始化操作
+     * 由于目前加强了隐私管理，所以需要在原生中进行的是preInit操作，
+     * 只有用户同意隐私协议后，才能进行init操作，所以将init拆分到js中调用
+     * @param type 设备类型，默认是手机
+     * @param secret 密钥，可以不传
+     */
+    static init = (type?:INIT_DEVICE_TYPE, secret?: string) => {
+        //因为目前只有android部分市场(譬如应用宝)有这方面的需求，所以暂时屏蔽掉ios平台
+        if(Platform.OS !== 'android') {
+            return;
+        }
+        //已经初始化过的，不再调用
+        if(AnalyticsUtil.initialed) {
+            return;
+        }
+        if(!type) {
+            //默认是针对手机类型
+            type = INIT_DEVICE_TYPE.DEVICE_TYPE_PHONE;
+        }
+        if(!secret) {
+            //直接传空字符串即可
+            secret = '';
+        }
+        //对老版本进行兼容性处理
+        UMAnalyticsModule.init && UMAnalyticsModule.init(type, secret);
+        if(!AnalyticsUtil.initialed) {
+            AnalyticsUtil.initialed = true;
+        }
+    }
+
     /**
      * 手动页面统计接口
      * 调用时机: 页面可见的时候
@@ -132,3 +165,8 @@ export default class AnalyticsUtil {
     }
 }
 
+
+export enum INIT_DEVICE_TYPE {
+    DEVICE_TYPE_PHONE = 1,
+    DEVICE_TYPE_BOX = 1,
+}
